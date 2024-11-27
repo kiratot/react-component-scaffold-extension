@@ -9,8 +9,8 @@ import { View, StyleSheet } from 'react-native';
 
 ${
   config.useTypeScript
-    ? `interface ${pascalCaseName}Props {
-    // Add your props here
+    ? `type ${pascalCaseName}Props ={
+
 }
 
 const ${pascalCaseName}: React.FC<${pascalCaseName}Props>`
@@ -18,7 +18,7 @@ const ${pascalCaseName}: React.FC<${pascalCaseName}Props>`
 } = () => {
     return (
         <View style={styles.container}>
-            {/* Add your component content here */}
+            
         </View>
     );
 };
@@ -41,12 +41,10 @@ import { View, StyleSheet } from 'react-native';
 
 ${
   config.useTypeScript
-    ? `interface ${pascalCaseName}Props {
-    // Add your props here
+    ? `type ${pascalCaseName}Props = {
 }
 
-interface ${pascalCaseName}State {
-    // Add your state here
+type ${pascalCaseName}State = {
 }
 
 class ${pascalCaseName} extends React.Component<${pascalCaseName}Props, ${pascalCaseName}State>`
@@ -67,7 +65,6 @@ class ${pascalCaseName} extends React.Component<${pascalCaseName}Props, ${pascal
     render() {
         return (
             <View style={styles.container}>
-                {/* Add your component content here */}
             </View>
         );
     }

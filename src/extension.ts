@@ -11,15 +11,27 @@ export function activate(context: vscode.ExtensionContext) {
   const resetConfigDisposable = vscode.commands.registerCommand(
     "react-component-scaffold.resetConfig",
     async () => {
-      await configService.getConfiguration(true);
+      try {
+        await configService.getConfiguration(true);
+      } catch (error) {
+        vscode.window.showErrorMessage(
+          `Error: ${error instanceof Error ? error.message : "Unknown error"}`
+        );
+      }
     }
   );
 
   const createComponentDisposable = vscode.commands.registerCommand(
     "react-component-scaffold.createComponent",
-    async () => {
-      const config = await configService.getConfiguration();
-      await componentService.createComponent(config);
+    async (uri: vscode.Uri) => {
+      try {
+        const config = await configService.getConfiguration();
+        await componentService.createComponent(config, uri);
+      } catch (error) {
+        vscode.window.showErrorMessage(
+          `Error: ${error instanceof Error ? error.message : "Unknown error"}`
+        );
+      }
     }
   );
 

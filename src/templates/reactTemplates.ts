@@ -19,7 +19,7 @@ const ${pascalCaseName}: React.FC<${pascalCaseName}Props>`
 } = () => {
     return (
         <div className={styles.container}>
-            {/* Add your component content here */}
+
         </div>
     );
 };
@@ -37,12 +37,12 @@ import styles from './${pascalCaseName}${styleFileName}';
 
 ${
   config.useTypeScript
-    ? `interface ${pascalCaseName}Props {
-    // Add your props here
+    ? `type ${pascalCaseName}Props = {
+    
 }
 
-interface ${pascalCaseName}State {
-    // Add your state here
+type ${pascalCaseName}State = {
+    
 }
 
 class ${pascalCaseName} extends React.Component<${pascalCaseName}Props, ${pascalCaseName}State>`
@@ -63,7 +63,7 @@ class ${pascalCaseName} extends React.Component<${pascalCaseName}Props, ${pascal
     render() {
         return (
             <div className={styles.container}>
-                {/* Add your component content here */}
+
             </div>
         );
     }

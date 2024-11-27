@@ -10,7 +10,8 @@ export class ConfigurationService {
   private readonly CONFIG_KEYS = {
     useTypeScript: "useTypeScript",
     styleExtension: "styleExtension",
-    componentType: "componentType",
+    defaultComponentType: "defaultComponentType",
+    promptForComponentType: "promptForComponentType",
     projectType: "projectType",
   } as const;
 
@@ -26,6 +27,13 @@ export class ConfigurationService {
   > = [
     { label: "Functional", value: "Functional" },
     { label: "Class", value: "Class" },
+  ];
+
+  private readonly PROMPT_FOR_COMPONENT_TYPE_ITEMS: ReadonlyArray<
+    vscode.QuickPickItem & { value: boolean }
+  > = [
+    { label: "Yes, ask me every time", value: true },
+    { label: "No, use default", value: false },
   ];
 
   private readonly LANGUAGE_TYPE_ITEMS: ReadonlyArray<
@@ -45,8 +53,11 @@ export class ConfigurationService {
       styleExtension: this.context.globalState.get<string>(
         this.CONFIG_KEYS.styleExtension
       ),
-      componentType: this.context.globalState.get<ComponentType>(
-        this.CONFIG_KEYS.componentType
+      defaultComponentType: this.context.globalState.get<ComponentType>(
+        this.CONFIG_KEYS.defaultComponentType
+      ),
+      promptForComponentType: this.context.globalState.get<boolean>(
+        this.CONFIG_KEYS.promptForComponentType
       ),
       projectType: this.context.globalState.get<ProjectType>(
         this.CONFIG_KEYS.projectType
@@ -70,7 +81,8 @@ export class ConfigurationService {
     return Boolean(
       config.useTypeScript !== undefined &&
         config.styleExtension !== undefined &&
-        config.componentType !== undefined &&
+        config.defaultComponentType !== undefined &&
+        config.promptForComponentType !== undefined &&
         config.projectType !== undefined
     );
   }
@@ -78,14 +90,18 @@ export class ConfigurationService {
   private async promptForConfiguration(): Promise<ScaffoldConfig> {
     const useTypeScript = await this.promptForTypeScript();
     const projectType = await this.promptForProjectType();
-    const componentType = await this.promptForComponentType();
+    const defaultComponentType = await this.promptForComponentType(
+      "Choose the default component type"
+    );
+    const promptForComponentType = await this.promptForComponentTypeOption();
     const styleExtension =
       projectType === "React" ? await this.promptForStyleExtension() : "styles";
 
     return {
       useTypeScript,
       styleExtension,
-      componentType,
+      defaultComponentType,
+      promptForComponentType,
       projectType,
     };
   }
@@ -116,17 +132,34 @@ export class ConfigurationService {
     return choice.value;
   }
 
-  private async promptForComponentType(): Promise<ComponentType> {
+  private async promptForComponentType(prompt: string): Promise<ComponentType> {
     const choice = await vscode.window.showQuickPick(
       this.COMPONENT_TYPE_ITEMS,
       {
-        placeHolder: "Choose the component type",
+        placeHolder: prompt,
         ignoreFocusOut: true,
       }
     );
 
     if (!choice) {
       throw new Error("Component type selection was cancelled");
+    }
+
+    return choice.value;
+  }
+
+  private async promptForComponentTypeOption(): Promise<boolean> {
+    const choice = await vscode.window.showQuickPick(
+      this.PROMPT_FOR_COMPONENT_TYPE_ITEMS,
+      {
+        placeHolder:
+          "Do you want to choose component type for each new component?",
+        ignoreFocusOut: true,
+      }
+    );
+
+    if (!choice) {
+      throw new Error("Component type prompt selection was cancelled");
     }
 
     return choice.value;
@@ -161,8 +194,12 @@ export class ConfigurationService {
         config.styleExtension
       ),
       this.context.globalState.update(
-        this.CONFIG_KEYS.componentType,
-        config.componentType
+        this.CONFIG_KEYS.defaultComponentType,
+        config.defaultComponentType
+      ),
+      this.context.globalState.update(
+        this.CONFIG_KEYS.promptForComponentType,
+        config.promptForComponentType
       ),
       this.context.globalState.update(
         this.CONFIG_KEYS.projectType,
@@ -174,7 +211,7 @@ export class ConfigurationService {
       `Configuration saved! Using ${
         config.useTypeScript ? "TypeScript" : "JavaScript"
       }, ` +
-        `${config.componentType} components for ${config.projectType} with ${config.styleExtension} styles`
+        `${config.defaultComponentType} components for ${config.projectType} with ${config.styleExtension} styles`
     );
   }
 }

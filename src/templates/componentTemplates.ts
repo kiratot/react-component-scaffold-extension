@@ -14,11 +14,11 @@ export function getComponentTemplate(
   config: ScaffoldConfig
 ): string {
   if (config.projectType === "React Native") {
-    return config.componentType === "Functional"
+    return config.defaultComponentType === "Functional"
       ? getReactNativeFunctionalTemplate(pascalCaseName, config)
       : getReactNativeClassTemplate(pascalCaseName, config);
   } else {
-    return config.componentType === "Functional"
+    return config.defaultComponentType === "Functional"
       ? getReactFunctionalTemplate(pascalCaseName, styleFileName, config)
       : getReactClassTemplate(pascalCaseName, styleFileName, config);
   }
@@ -29,7 +29,6 @@ export function getStyleTemplate(config: ScaffoldConfig): string {
     return ""; // No separate style file for React Native
   }
   return `.container {
-    /* Add your styles here */
 }`;
 }
 

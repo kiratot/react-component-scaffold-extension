@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import * as path from "path";
-import { ScaffoldConfig } from "../types/config";
+import { ComponentType, ScaffoldConfig } from "../types/config";
 import { convertToPascalCase } from "../utils/stringUtils";
 import {
   getComponentTemplate,
@@ -10,9 +10,15 @@ import {
 } from "../templates/componentTemplates";
 
 export class ComponentService {
-  async createComponent(config: ScaffoldConfig): Promise<void> {
-    const workspaceFolder = this.getWorkspaceFolder();
-    if (!workspaceFolder) {
+  constructor() {}
+
+  async createComponent(
+    config: ScaffoldConfig,
+    targetUri?: vscode.Uri
+  ): Promise<void> {
+    const baseDir = this.getTargetDirectory(targetUri);
+
+    if (!baseDir) {
       throw new Error("Please open a workspace first");
     }
 
@@ -21,16 +27,31 @@ export class ComponentService {
       return;
     }
 
+    const componentType = await this.determineComponentType(config);
     const pascalCaseName = convertToPascalCase(componentName);
-    const componentDir = this.createComponentDirectory(
-      workspaceFolder,
-      componentName
-    );
-    await this.createComponentFiles(componentDir, pascalCaseName, config);
+    const componentDir = this.createComponentDirectory(baseDir, componentName);
+
+    await this.createComponentFiles(componentDir, pascalCaseName, {
+      ...config,
+      defaultComponentType: componentType,
+    });
 
     vscode.window.showInformationMessage(
       `Component ${pascalCaseName} created successfully!`
     );
+  }
+
+  private getTargetDirectory(uri?: vscode.Uri): string | undefined {
+    if (!uri) {
+      return this.getWorkspaceFolder()?.uri.fsPath;
+    }
+
+    const stat = fs.statSync(uri.fsPath);
+    if (stat.isDirectory()) {
+      return uri.fsPath;
+    }
+
+    return path.dirname(uri.fsPath);
   }
 
   private getWorkspaceFolder(): vscode.WorkspaceFolder | undefined {
@@ -50,10 +71,10 @@ export class ComponentService {
   }
 
   private createComponentDirectory(
-    workspaceFolder: vscode.WorkspaceFolder,
+    baseDir: string,
     componentName: string
   ): string {
-    const componentDir = path.join(workspaceFolder.uri.fsPath, componentName);
+    const componentDir = path.join(baseDir, componentName);
     fs.mkdirSync(componentDir, { recursive: true });
     return componentDir;
   }
@@ -63,7 +84,7 @@ export class ComponentService {
     pascalCaseName: string,
     config: ScaffoldConfig
   ): Promise<void> {
-    const componentExt = config.useTypeScript ? "tsx" : "jsx";
+    const componentExt = config.useTypeScript ? "tsx" : "js";
     const indexExt = config.useTypeScript ? "ts" : "js";
     const styleFileName =
       config.projectType === "React" ? `.module.${config.styleExtension}` : "";
@@ -89,5 +110,32 @@ export class ComponentService {
       const filePath = path.join(componentDir, fileName);
       await fs.promises.writeFile(filePath, content);
     }
+  }
+
+  private async determineComponentType(
+    config: ScaffoldConfig
+  ): Promise<ComponentType> {
+    if (!config.promptForComponentType) {
+      return config.defaultComponentType;
+    }
+
+    const choice = await vscode.window.showQuickPick<
+      vscode.QuickPickItem & { value: ComponentType }
+    >(
+      [
+        { label: "Functional", value: "Functional" },
+        { label: "Class", value: "Class" },
+      ],
+      {
+        placeHolder: "Choose the component type for this component",
+        ignoreFocusOut: true,
+      }
+    );
+
+    if (!choice) {
+      throw new Error("Component type selection was cancelled");
+    }
+
+    return choice.value;
   }
 }

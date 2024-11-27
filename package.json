@@ -22,25 +22,13 @@
         "title": "Reset React Component Scaffold Configuration"
       }
     ],
-    "configuration": {
-      "title": "React Component Scaffold",
-      "properties": {
-        "reactComponentScaffold.useTypeScript": {
-          "type": "boolean",
-          "default": true,
-          "description": "Use TypeScript (.tsx) instead of JavaScript (.jsx)"
-        },
-        "reactComponentScaffold.useCSSModules": {
-          "type": "boolean",
-          "default": true,
-          "description": "Use CSS Modules (.module.css/.module.scss) instead of regular CSS/SCSS"
-        },
-        "reactComponentScaffold.useScss": {
-          "type": "boolean",
-          "default": true,
-          "description": "Use SCSS instead of CSS"
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "react-component-scaffold.createComponent",
+          "group": "navigation"
         }
-      }
+      ]
     }
   },
   "scripts": {

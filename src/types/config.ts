@@ -4,7 +4,8 @@ export type ProjectType = "React" | "React Native";
 export interface ScaffoldConfig {
   useTypeScript: boolean;
   styleExtension: string;
-  componentType: ComponentType;
+  defaultComponentType: ComponentType;
+  promptForComponentType: boolean;
   projectType: ProjectType;
 }
 
