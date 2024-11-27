@@ -1,0 +1,69 @@
+{
+  "name": "react-component-scaffold",
+  "displayName": "React Component Scaffold",
+  "description": "Quickly create a react component with the right (opinionated) structure",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "react-component-scaffold.createComponent",
+        "title": "Create React Component"
+      },
+      {
+        "command": "react-component-scaffold.resetConfig",
+        "title": "Reset React Component Scaffold Configuration"
+      }
+    ],
+    "configuration": {
+      "title": "React Component Scaffold",
+      "properties": {
+        "reactComponentScaffold.useTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use TypeScript (.tsx) instead of JavaScript (.jsx)"
+        },
+        "reactComponentScaffold.useCSSModules": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use CSS Modules (.module.css/.module.scss) instead of regular CSS/SCSS"
+        },
+        "reactComponentScaffold.useScss": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use SCSS instead of CSS"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "clean": "rimraf dist"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.95.0",
+    "@types/mocha": "^10.0.9",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.10.0",
+    "@typescript-eslint/parser": "^8.7.0",
+    "eslint": "^9.13.0",
+    "typescript": "^5.6.3",
+    "ts-loader": "^9.5.1",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1"
+  }
+}
