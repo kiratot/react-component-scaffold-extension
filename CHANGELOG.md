@@ -7,3 +7,18 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [Unreleased]
 
 - Initial release
+
+## [0.0.2] - 2024-03-XX
+
+### Added
+
+- Initial release
+- Support for React and React Native components
+- TypeScript and JavaScript support
+- Functional and Class component templates
+- Separate type definitions in dedicated files
+- Right-click folder/file to create component in specific location
+- Configurable style extensions for React components
+- Option to choose component type per creation
+- Global configuration with reset capability
+- Type imports with explicit 'type' keyword
