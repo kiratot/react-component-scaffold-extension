@@ -45,18 +45,24 @@ To reset configuration:
 
 For TypeScript React components:
 
+```
 component-name/
 ├── ComponentName.tsx
 ├── types.ts
 ├── index.ts (or .js)
 └── ComponentName.module.scss (for React only)
 
+```
+
 For TypeScript React Native components:
 
+```
 component-name/
 ├── ComponentName.tsx
 ├── types.ts
 └── index.ts
+
+```
 
 For JavaScript components, the same structure applies but with `.js` extensions and no `types.ts` file.
 

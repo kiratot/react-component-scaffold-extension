@@ -2,7 +2,7 @@
   "name": "react-component-scaffold",
   "displayName": "React Component Scaffold",
   "description": "Quickly create React components with a clean folder structure in kebab-case",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "kiratot",
   "author": {
     "name": "kiratot"
