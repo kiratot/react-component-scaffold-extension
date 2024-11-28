@@ -6,19 +6,17 @@ export function getReactNativeFunctionalTemplate(
 ): string {
   return `import React from 'react';
 import { View, StyleSheet } from 'react-native';
-
 ${
   config.useTypeScript
-    ? `type ${pascalCaseName}Props ={
-
+    ? `import type { ${pascalCaseName}Props } from './types';`
+    : ""
 }
 
-const ${pascalCaseName}: React.FC<${pascalCaseName}Props>`
-    : `const ${pascalCaseName}`
-} = () => {
+const ${pascalCaseName}${
+    config.useTypeScript ? `: React.FC<${pascalCaseName}Props>` : ""
+  } = () => {
     return (
         <View style={styles.container}>
-            
         </View>
     );
 };
@@ -38,18 +36,17 @@ export function getReactNativeClassTemplate(
 ): string {
   return `import React from 'react';
 import { View, StyleSheet } from 'react-native';
-
 ${
   config.useTypeScript
-    ? `type ${pascalCaseName}Props = {
+    ? `import type { ${pascalCaseName}Props, ${pascalCaseName}State } from './types';`
+    : ""
 }
 
-type ${pascalCaseName}State = {
-}
-
-class ${pascalCaseName} extends React.Component<${pascalCaseName}Props, ${pascalCaseName}State>`
-    : `class ${pascalCaseName} extends React.Component`
-} {
+class ${pascalCaseName} extends React.Component${
+    config.useTypeScript
+      ? `<${pascalCaseName}Props, ${pascalCaseName}State>`
+      : ""
+  } {
     ${
       config.useTypeScript
         ? `constructor(props: ${pascalCaseName}Props) {

@@ -7,8 +7,16 @@ import {
   getReactNativeFunctionalTemplate,
   getReactNativeClassTemplate,
 } from "./reactNativeTemplates";
+import { getTypesTemplate } from "./typeTemplates";
 
-export function getComponentTemplate(
+export {
+  getComponentTemplate,
+  getStyleTemplate,
+  getIndexTemplate,
+  getTypesTemplate,
+};
+
+function getComponentTemplate(
   pascalCaseName: string,
   styleFileName: string,
   config: ScaffoldConfig
@@ -24,14 +32,14 @@ export function getComponentTemplate(
   }
 }
 
-export function getStyleTemplate(config: ScaffoldConfig): string {
+function getStyleTemplate(config: ScaffoldConfig): string {
   if (config.projectType === "React Native") {
-    return ""; // No separate style file for React Native
+    return "";
   }
   return `.container {
 }`;
 }
 
-export function getIndexTemplate(pascalCaseName: string): string {
+function getIndexTemplate(pascalCaseName: string): string {
   return `export { default } from './${pascalCaseName}';`;
 }

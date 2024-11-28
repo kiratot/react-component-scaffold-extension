@@ -7,6 +7,7 @@ import {
   getComponentTemplate,
   getStyleTemplate,
   getIndexTemplate,
+  getTypesTemplate,
 } from "../templates/componentTemplates";
 
 export class ComponentService {
@@ -99,6 +100,11 @@ export class ComponentService {
 
     // Add index file
     files.set(`index.${indexExt}`, getIndexTemplate(pascalCaseName));
+
+    // Add types file for TypeScript
+    if (config.useTypeScript) {
+      files.set("types.ts", getTypesTemplate(pascalCaseName, config));
+    }
 
     // Add style file only for React projects
     if (config.projectType === "React") {

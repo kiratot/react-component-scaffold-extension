@@ -7,19 +7,17 @@ export function getReactFunctionalTemplate(
 ): string {
   return `import React from 'react';
 import styles from './${pascalCaseName}${styleFileName}';
-
 ${
   config.useTypeScript
-    ? `interface ${pascalCaseName}Props {
-    // Add your props here
+    ? `import type { ${pascalCaseName}Props } from './types';`
+    : ""
 }
 
-const ${pascalCaseName}: React.FC<${pascalCaseName}Props>`
-    : `const ${pascalCaseName}`
-} = () => {
+const ${pascalCaseName}${
+    config.useTypeScript ? `: React.FC<${pascalCaseName}Props>` : ""
+  } = () => {
     return (
         <div className={styles.container}>
-
         </div>
     );
 };
@@ -34,20 +32,17 @@ export function getReactClassTemplate(
 ): string {
   return `import React from 'react';
 import styles from './${pascalCaseName}${styleFileName}';
-
 ${
   config.useTypeScript
-    ? `type ${pascalCaseName}Props = {
-    
+    ? `import type { ${pascalCaseName}Props, ${pascalCaseName}State } from './types';`
+    : ""
 }
 
-type ${pascalCaseName}State = {
-    
-}
-
-class ${pascalCaseName} extends React.Component<${pascalCaseName}Props, ${pascalCaseName}State>`
-    : `class ${pascalCaseName} extends React.Component`
-} {
+class ${pascalCaseName} extends React.Component${
+    config.useTypeScript
+      ? `<${pascalCaseName}Props, ${pascalCaseName}State>`
+      : ""
+  } {
     ${
       config.useTypeScript
         ? `constructor(props: ${pascalCaseName}Props) {
@@ -63,7 +58,6 @@ class ${pascalCaseName} extends React.Component<${pascalCaseName}Props, ${pascal
     render() {
         return (
             <div className={styles.container}>
-
             </div>
         );
     }
