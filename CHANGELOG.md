@@ -8,6 +8,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Initial release
 
+## [0.0.3] - 2024-03-XX
+
+### Fixed
+- Improved README formatting for better readability in VS Code Marketplace
+- Fixed directory structure display in documentation
+
 ## [0.0.2] - 2024-03-XX
 
 ### Added
